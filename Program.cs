@@ -6,7 +6,16 @@ namespace Scheduler_1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Start");
+
+            Task x = new Task();
+            Task y = new Task();
+
+            Task[] a = new[] { x, y };
+
+            Console.WriteLine(x.dateTime.Date);
+
+            Console.WriteLine("Finish");
         }
     }
 }
