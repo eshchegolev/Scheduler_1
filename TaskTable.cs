@@ -74,4 +74,93 @@ namespace Scheduler_1
             Console.Read();
         }
     }
+
+    class ProgramQQ
+    {
+        static void MainQQ(string[] args)
+        {
+            // создаем каталог для файла
+            string path = @"D:\Temp\";
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            if (!dirInfo.Exists)
+            {
+                dirInfo.Create();
+            }
+
+            Console.WriteLine("Введите строку для записи в файл:");
+            string text = Console.ReadLine();
+
+            // запись в файл
+            using (FileStream fstream = new FileStream($"{path}note.txt", FileMode.OpenOrCreate))
+            {
+                // преобразуем строку в байты
+                byte[] array = System.Text.Encoding.Default.GetBytes(text);
+                // запись массива байтов в файл
+                fstream.Write(array, 0, array.Length);
+                Console.WriteLine("Текст записан в файл");
+            }
+
+
+            // чтение из файла
+            using (FileStream fstream = File.OpenRead($"{path}note.txt"))
+            {
+                // преобразуем строку в байты
+                byte[] array = new byte[fstream.Length];
+                // считываем данные
+                fstream.Read(array, 0, array.Length);
+                // декодируем байты в строку
+                string textFromFile = System.Text.Encoding.Default.GetString(array);
+                Console.WriteLine($"Текст из файла:\n{textFromFile}");
+            }
+
+            Console.ReadLine();
+        }
+    }
+
+    class ProgramZZ
+    {
+        static async Task MainZZ(string[] args)
+        {
+
+            Console.WriteLine("Введите строку для записи в файл:");
+            string text = Console.ReadLine();
+
+
+            TaskList taskList = new TaskList(3);
+            taskList[0] = new IndividualTask { Number = 1, MyTask = "Tom" };
+            taskList[1] = new IndividualTask { Number = 2, MyTask = "Bob" };
+            taskList[2] = new IndividualTask { Number = 3, MyTask = "Jhon" };
+
+            //            IndividualTask bob = taskList[1];
+            //            Console.WriteLine(bob?.Name);
+
+
+
+
+            // сохранение данных
+            using (FileStream fs = new FileStream("TaskList.txt", FileMode.OpenOrCreate))
+            {
+                await JsonSerializer.SerializeAsync<IndividualTask>(fs, taskList[0]);
+                await JsonSerializer.SerializeAsync<IndividualTask>(fs, taskList[1]);
+                await JsonSerializer.SerializeAsync<IndividualTask>(fs, taskList[2]);
+
+                //                await JsonSerializer.SerializeAsync<TaskList>(fs, taskList);
+                Console.WriteLine("Data has been saved to file");
+            }
+
+            // чтение данных
+            using (FileStream fs = new FileStream("user.json", FileMode.OpenOrCreate))
+            {
+                TaskList restoredTaskList = new TaskList(3);
+                restoredTaskList = await JsonSerializer.DeserializeAsync<TaskList>(fs);
+                //                Console.WriteLine($"Age: {restoredPerson.Number} Name: {restoredPerson.Name} ");
+            }
+
+
+            Console.ReadKey();
+        }
+    }
+
+
+
 }
