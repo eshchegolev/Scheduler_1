@@ -38,7 +38,7 @@ namespace Scheduler_1
                     Console.WriteLine("\n\nВозможные действия со списком задач:");
                     Console.WriteLine("* введите \"+\" для добавления задач в список.");
                     Console.WriteLine("* введите \"-\" для удаления задач из списка.");
-                    Console.WriteLine("* введите \"!\" для редактирования задач в списке.");
+                    Console.WriteLine("* введите \"e\" для редактирования задач в списке.");
                     Console.WriteLine("* введите \"f\" для сохранения списка в файле.");
                     Console.WriteLine("* введите \"q\" для выхода из программы.");
 
@@ -55,9 +55,9 @@ namespace Scheduler_1
                         taskList = taskList.RemoveTask(ref NumTask, taskList);
                     }
                     // Редактируем задачи из списка
-                    else if (str == "!")
+                    else if (str == "e")
                     {
-                        Console.WriteLine("!!!");
+                        taskList = taskList.EditTask(ref NumTask, taskList);
                     }
                     // Сохраняем задачи в файл
                     else if (str == "f")

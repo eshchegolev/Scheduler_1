@@ -79,5 +79,36 @@ namespace Scheduler_1
             NumTask--;
             return tempList;
         }
+
+        public TaskList EditTask(ref int NumTask, TaskList taskList)
+        {
+            Console.WriteLine("\nВведите номер задачи, которую необходимо редактировать.\n");
+
+            int number = 0;
+
+            try
+            {
+                number = Convert.ToInt32(Console.ReadLine());
+            }
+            catch
+            {
+                Console.WriteLine("Введите корректно номер задачи!");
+            }
+
+            if (number > NumTask || number < 1)
+            {
+                Console.WriteLine("В списке отсутствует задача с таким номером!\n" +
+                    "Для продолжения работы нажмите \"Enter\".");
+                Console.ReadLine();
+                return taskList;
+            }
+
+            Console.WriteLine("Редактируемая задача:  " + taskList[number-1].MyTask);
+            Console.Write("Введите новый вариант: ");
+            taskList[number - 1].MyTask = Console.ReadLine();
+
+            return taskList;
+        }
+
     }
 }
