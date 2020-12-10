@@ -8,15 +8,14 @@ namespace Scheduler_1
     {
         //Количесвто задач в списке
         public int NumTask;
+        
+        //Максимально возможное количесвто задач в списке
+        public const int MaxTask = 20;
 
         IndividualTask[] data;
         public TaskList()
         {
-            data = new IndividualTask[20];
-        }
-        public TaskList(int param)
-        {
-            data = new IndividualTask[param];
+            data = new IndividualTask[MaxTask];
         }
 
         // Индексатор
@@ -32,13 +31,34 @@ namespace Scheduler_1
             }
         }
 
-
-        public string SaveFileList(TaskList taskList)
+        public void SaveFileList(TaskList taskList)
         {
+            if (taskList.NumTask == 0)
+            {
+                Console.WriteLine("\n=== Список пуст! Нет задач для сохранения в файл! ===");
+                return;
+            }
 
-            string str = "Список задач успешно сохранён в файле \"file.txt\",\n" +
-                            "для продолжения работы нажмите \"Enter\".";
-            return str;
+            Console.WriteLine("Начало процесса записи списка в файл!");
+            try
+            {
+                StreamWriter sw = new StreamWriter("List.txt");
+
+                for (int i = 0; i < taskList.NumTask; i++)
+                {
+                    sw.Write(String.Format("{0,-5:0}", taskList[i].Number.ToString()));
+                    sw.WriteLine(taskList[i].MyTask);
+                }
+                sw.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Процесс записи в файл завершён!");
+            }
         }
 
 
@@ -49,16 +69,19 @@ namespace Scheduler_1
 
             try
             {
-                // Передаём путь к файлу и имя файла конструктору StreamReader
-                StreamReader sr = new StreamReader("D:\\Temp\\List.txt");
-                //Читаем первую строку файла
-                line = sr.ReadLine();
-                //Читаем файл до конца
-                while (line != null)
+                // Передаём путь к файлу (рядом с исполняемым) и имя файла конструктору StreamReader
+                StreamReader sr = new StreamReader("List.txt");
+
+                for (int i = 0; i < MaxTask; i++)
                 {
-                    taskList[NumTask] = new IndividualTask { Number = NumTask + 1, MyTask = line };
                     line = sr.ReadLine();
-                    NumTask++;
+                    if (line == null) break;
+
+                    taskList[i] = new IndividualTask {
+                        Number = int.Parse(line.Substring(0,5)),
+                        MyTask = line.Substring(5) };
+
+                    taskList.NumTask++;
                 }
                 sr.Close();
             }
@@ -68,8 +91,7 @@ namespace Scheduler_1
             }
             finally
             {
-                taskList.NumTask = NumTask;
-                Console.WriteLine("Процесс чтения файла завершён!");
+                Console.WriteLine("Процесс чтения из файла успешно завершён!");
             }
 
             return taskList;
@@ -94,6 +116,12 @@ namespace Scheduler_1
 
         public void RemoveTask(ref TaskList taskList)
         {
+            if (taskList.NumTask == 0)
+            {
+                Console.WriteLine("\n+++ Список пуст! Нет задач для удаления! +++");
+                return;
+            }
+
             Console.WriteLine("\nВведите номер задачи, которую необходимо удалить.\n");
 
             int number = 0;
@@ -130,6 +158,12 @@ namespace Scheduler_1
 
         public TaskList EditTask(TaskList taskList)
         {
+            if (taskList.NumTask == 0)
+            {
+                Console.WriteLine("\n### Список пуст! Нет задач для редактирования! ###");
+                return taskList;
+            }
+
             Console.WriteLine("\nВведите номер задачи, которую необходимо редактировать.\n");
 
             int number = 0;
@@ -157,6 +191,5 @@ namespace Scheduler_1
 
             return taskList;
         }
-
     }
 }
