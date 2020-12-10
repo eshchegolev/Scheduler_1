@@ -1,10 +1,14 @@
 ﻿using System;
+using System.IO;
 
 
 namespace Scheduler_1
 {
     class TaskList
     {
+        //Количесвто задач в списке
+        public int NumTask;
+
         IndividualTask[] data;
         public TaskList()
         {
@@ -15,7 +19,7 @@ namespace Scheduler_1
             data = new IndividualTask[param];
         }
 
-        // индексатор
+        // Индексатор
         public IndividualTask this[int index]
         {
             get
@@ -28,7 +32,51 @@ namespace Scheduler_1
             }
         }
 
-        public void AddTask(ref int NumTask, ref TaskList taskList)
+
+        public string SaveFileList(TaskList taskList)
+        {
+
+            string str = "Список задач успешно сохранён в файле \"file.txt\",\n" +
+                            "для продолжения работы нажмите \"Enter\".";
+            return str;
+        }
+
+
+        public TaskList ReadFileList()
+        {
+            TaskList taskList = new TaskList();
+            string line;
+
+            try
+            {
+                // Передаём путь к файлу и имя файла конструктору StreamReader
+                StreamReader sr = new StreamReader("D:\\Temp\\List.txt");
+                //Читаем первую строку файла
+                line = sr.ReadLine();
+                //Читаем файл до конца
+                while (line != null)
+                {
+                    taskList[NumTask] = new IndividualTask { Number = NumTask + 1, MyTask = line };
+                    line = sr.ReadLine();
+                    NumTask++;
+                }
+                sr.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                taskList.NumTask = NumTask;
+                Console.WriteLine("Процесс чтения файла завершён!");
+            }
+
+            return taskList;
+        }
+
+
+        public void AddTask(ref TaskList taskList)
         {
             Console.WriteLine("\nВведите все важные задачи на текущий день.\n" +
                               "Пустая строка должна завершить списток.");
@@ -44,7 +92,7 @@ namespace Scheduler_1
             }
         }
 
-        public TaskList RemoveTask(ref int NumTask, TaskList taskList)
+        public void RemoveTask(ref TaskList taskList)
         {
             Console.WriteLine("\nВведите номер задачи, которую необходимо удалить.\n");
 
@@ -64,7 +112,7 @@ namespace Scheduler_1
                 Console.WriteLine("В списке отсутствует задача с таким номером!\n" +
                     "Для продолжения работы нажмите \"Enter\".");
                 Console.ReadLine();
-                return taskList;
+                return;
             }
 
             TaskList tempList = taskList;
@@ -77,10 +125,10 @@ namespace Scheduler_1
             }
 
             NumTask--;
-            return tempList;
+            return;
         }
 
-        public TaskList EditTask(ref int NumTask, TaskList taskList)
+        public TaskList EditTask(TaskList taskList)
         {
             Console.WriteLine("\nВведите номер задачи, которую необходимо редактировать.\n");
 

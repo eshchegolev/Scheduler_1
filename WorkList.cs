@@ -6,9 +6,6 @@ namespace Scheduler_1
     {
         public void WorkTask()
         {
-            // Вводим переменную, отображающую количество задач
-            int NumTask = 0;
-
             // Создаём экземпляр класса, массив объектов, состоящий из всего списка дел.
             TaskList taskList = new TaskList();
 
@@ -16,67 +13,71 @@ namespace Scheduler_1
             {
                 string str;
 
-                if (NumTask == 0)
+                if (taskList.NumTask == 0)
                 {
-                    Console.WriteLine("Введите \"+\" для добавления задач вручную и нажмите \"Enter\".");
-                    Console.WriteLine("Либо введите \"r\" для считывания списка задач из файла и нажмите \"Enter\".");
+                    Console.WriteLine("Возможные действия:");
+                    Console.WriteLine("* введите \"a\" (add) для добавления задач вручную.");
+                    Console.WriteLine("* введите \"r\" (read) для считывания списка задач из файла.");
+                    Console.WriteLine("* введите \"q\" (quit) для выхода из программы.");
 
                     str = Console.ReadLine();
 
-                    if (str == "+")
+                    if (str == "a" || str == "add")
                     {
-                        // Добавляем задачи в список вручную
-                        taskList.AddTask(ref NumTask, ref taskList);
+                        taskList.AddTask(ref taskList);
                     }
-                    else if (str == "r")
+                    else if (str == "r" || str == "read")
                     {
-                        Console.WriteLine("Пока нет возможности прочитать список из файла");
+                        taskList = taskList.ReadFileList();
+                    }
+                    else if (str == "q" || str == "quit")
+                    {
+                        break;  // Выход из цикла и завершение программы
                     }
                 }
                 else
                 {
                     Console.WriteLine("\n\nВозможные действия со списком задач:");
-                    Console.WriteLine("* введите \"+\" для добавления задач в список.");
-                    Console.WriteLine("* введите \"-\" для удаления задач из списка.");
-                    Console.WriteLine("* введите \"e\" для редактирования задач в списке.");
-                    Console.WriteLine("* введите \"f\" для сохранения списка в файле.");
-                    Console.WriteLine("* введите \"q\" для выхода из программы.");
+                    Console.WriteLine("* введите \"a\" (add) для добавления задач в список.");
+                    Console.WriteLine("* введите \"d\" (del) для удаления задач из списка.");
+                    Console.WriteLine("* введите \"e\" (edit) для редактирования задач в списке.");
+                    Console.WriteLine("* введите \"s\" (save) для сохранения списка в файле.");
+                    Console.WriteLine("* введите \"q\" (quit) для выхода из программы.");
 
                     str = Console.ReadLine();
 
                     // Добавляем задачи в список
-                    if (str == "+")
+                    if (str == "a" || str == "add")
                     {
-                        taskList.AddTask(ref NumTask, ref taskList);
+                        taskList.AddTask(ref taskList);
                     }
                     // Удаляем задачи из списка
-                    else if (str == "-")
+                    else if (str == "d" || str == "del")
                     {
-                        taskList = taskList.RemoveTask(ref NumTask, taskList);
+                        taskList.RemoveTask(ref taskList);
                     }
                     // Редактируем задачи из списка
-                    else if (str == "e")
+                    else if (str == "e" || str == "edit")
                     {
-                        taskList = taskList.EditTask(ref NumTask, taskList);
+                        taskList = taskList.EditTask(taskList);
                     }
                     // Сохраняем задачи в файл
-                    else if (str == "f")
+                    else if (str == "s" || str == "save")
                     {
-                        Console.WriteLine("Список задач успешно сохранён в файле \"file.txt\",\n" +
-                            "для продолжения работы нажмите \"Enter\".");
+                        Console.WriteLine(taskList.SaveFileList(taskList));
                         Console.ReadLine();
                     }
-                    else if (str == "q")
+                    else if (str == "q" || str == "quit")
                     {
                         break;  // Выход из цикла и завершение программы
                     }
                 }
 
-                Console.WriteLine($"\nКоличество введённых задач = {NumTask}\n");
+                Console.WriteLine($"\nКоличество задач в списке = {taskList.NumTask}\n");
 
-                if (NumTask > 0) Console.WriteLine("Текущий список задач следующий:");
+                if (taskList.NumTask > 0) Console.WriteLine("Текущий список задач следующий:");
 
-                for (int i = 0; i < NumTask; i++)
+                for (int i = 0; i < taskList.NumTask; i++)
                 {
                     Console.WriteLine(taskList[i].Number.ToString() + ") " + taskList[i].MyTask);
                 }
