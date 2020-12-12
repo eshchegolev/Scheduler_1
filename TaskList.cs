@@ -6,13 +6,18 @@ namespace Scheduler_1
 {
     class TaskList
     {
-        //Количесвто задач в списке
-        public int NumTask;
-        
-        //Максимально возможное количесвто задач в списке
-        public const int MaxTask = 20;
+        //Текущее количество задач в списке
+        private int numTask;
+
+        //Максимально возможное количество задач в списке
+        private const int maxTask = 20;
 
         IndividualTask[] data;
+
+        public int NumTask { get => numTask; set => numTask = value; }
+
+        public static int MaxTask => maxTask;
+
         public TaskList()
         {
             data = new IndividualTask[MaxTask];
@@ -39,7 +44,6 @@ namespace Scheduler_1
                 return;
             }
 
-            Console.WriteLine("Начало процесса записи списка в файл!");
             try
             {
                 StreamWriter sw = new StreamWriter("List.txt");
@@ -54,6 +58,7 @@ namespace Scheduler_1
             catch (Exception e)
             {
                 Console.WriteLine("Exception: " + e.Message);
+                Console.ReadLine();
             }
             finally
             {
@@ -77,9 +82,11 @@ namespace Scheduler_1
                     line = sr.ReadLine();
                     if (line == null) break;
 
-                    taskList[i] = new IndividualTask {
-                        Number = int.Parse(line.Substring(0,5)),
-                        MyTask = line.Substring(5) };
+                    taskList[i] = new IndividualTask
+                    {
+                        Number = int.Parse(line.Substring(0, 5)),
+                        MyTask = line.Substring(5)
+                    };
 
                     taskList.NumTask++;
                 }
@@ -88,10 +95,11 @@ namespace Scheduler_1
             catch (Exception e)
             {
                 Console.WriteLine("Exception: " + e.Message);
+                Console.ReadKey();
             }
             finally
             {
-                Console.WriteLine("Процесс чтения из файла успешно завершён!");
+                Console.WriteLine("Процесс чтения списка из файла завершён!");
             }
 
             return taskList;
